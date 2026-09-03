@@ -1,8 +1,14 @@
+using Application.Common.Settings;
 using Application.Repositories;
+using Application.Services.AuthService;
+using Application.Services.CurrentUserService;
+using Application.Services.SecurityService;
+using Application.Services.TokenService;
 using Domain.Entities;
 using Infrastructure.Context;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
-using Application.Common.Settings;
 
 
 
@@ -84,9 +89,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpContextAccessor();
 
-
-builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserSecurityService, UserSecurityService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
 
 
